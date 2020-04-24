@@ -1,0 +1,8 @@
+{
+    "python.pythonPath": "/Users/karan/.local/share/virtualenvs/Next-Level-Resume--IbsNWg-/bin/python",
+
+    "python.linting.pylintArgs": [
+        "--load-plugins",
+        "pylint-flask"
+    ]
+}

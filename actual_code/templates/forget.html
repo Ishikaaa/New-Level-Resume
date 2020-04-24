@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>forget</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
+        <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/typicons/2.0.9/typicons.min.css'>
+        <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css'>
+        <link rel="stylesheet" href="{{url_for('static',filename='forget.css')}}">
+    </head>
+    <body>
+        <body id="particles-js"></body>
+        <div class="animated bounceInDown">
+        <div class="container">
+            <span class="error animated tada" id="msg"></span>
+            <form name="form1" class="box form-signin" method="POST" action="/forget">
+            <form action="/action_page.php" method="post">
+            <h4>FORGOT <span>PASSWORDD??</span></h4>
+            <h5>Lets hope you remember other details we ask</h5>
+            <div class="flashes">
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% if messages!=[""] %}
+                    <h6>{{messages}}</h6>
+                    {% endif %}
+                    <input type="text" name="username" placeholder="username" autocomplete="off" required>
+                    <input type="text" name="question" placeholder="question1" autocomplete="off" required >
+                    <input type="text" name="answer" placeholder="answer1" autocomplete="off" required><br/>
+                    <button type="submit" class="btn1">Next</button>
+                {% endif %} 
+                {% endwith %}
+            </div>      
+            </form>
+            </form>
+
+            <form name="form1" class="box form-signin" method="POST" action="/forget1">
+            <form action="/action_page.php" method="post">
+            <div class="flashes">
+                {% if error %}
+                <input type="text" name="new_password" placeholder="New password" autocomplete="off" required>
+                <input type="text" name="repeat_password" placeholder="Repeat Password" autocomplete="off" required>
+                <input type="submit" value="Submit" class="btn1">
+                {% endif %}
+            </div>
+            </form>
+            </form>
+        </div> 
+            <div class="footer">
+            <span><a href="./login"><i class="fa fa-heart pulse"></i> I remember my details <i class="fa fa-heart pulse"></i></a></span>
+            </div>
+        </div>
+        <script src='https://cldup.com/S6Ptkwu_qA.js'></script>
+        <script src="{{url_for('static',filename='forget.js')}}"></script>
+    </body>
+</html>

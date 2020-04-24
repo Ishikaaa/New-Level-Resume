@@ -1,0 +1,30 @@
+
+  <!DOCTYPE html>
+  <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+  <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+  <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+  <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+      <head>
+          <meta charset="utf-8">
+          <meta http-equiv="X-UA-Compatible" content="IE=edge">
+          <title></title>
+          <meta name="description" content="">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <link rel="stylesheet" href="{{url_for('static',filename='index.css')}}">
+      </head>
+      <body>
+        <video autoplay muted id="my_video">
+            <source src="../static/index.mp4" type="video/mp4">
+          </video>
+          <script type="text/javascript" language="javascript">
+
+            function playVideo() {
+                var video= document.getElementById('my_video');
+                video.play();
+                video.addEventListener('ended',function() {
+                    window.location= '/login';
+                });
+            }
+            playVideo();
+            </script>      
+  </html>

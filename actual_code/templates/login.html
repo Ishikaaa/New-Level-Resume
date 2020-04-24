@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans:600'><link rel="stylesheet" href="../static/login.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<div class="login-wrap">
+   
+	<div class="login-html">
+		<input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Sign In</label>
+      <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab">Sign Up</label>
+      
+		<div class="login-form">
+		 <!-- urfor -->
+			<form class="form-signin" method="POST" action="/login">
+				<form action="/action_page.php" method="post">
+					<div class="sign-in-htm">
+						<div class="group">
+							<!-- <div id="register_message"> -->
+							<div class="flashes" id="register_message">
+								{% for message in get_flashed_messages()%}
+								  {{ message }}
+								{% endfor %}
+							</div>
+						</div>
+						<input type="hidden" name="next" value="{{ request.args.get('next', '') }}"/>
+						<div class="group">
+							<label for="user" class="label">Usernameee</label>
+							<input id="user" type="text" class="input" name="log_username" required maxlength="20" onclick="hidemessage()">
+						</div>
+						<div class="group">
+							<label for="pass" class="label">Password</label>
+							<input id="log_password" type="password" class="input" name="log_password" required maxlength="20">
+							<!-- data-type="password" -->
+						</div>
+						<div class="group">
+							<input id="check" type="checkbox" class="check" checked name="log_keep_me_signed_in">
+							<label for="check"><span class="icon"></span> Keep me Signed in</label>
+						</div>
+						<div class="group">
+							<input type="submit" class="button" value="Sign In">
+						</div>
+						<div class="hr"></div>
+						<div class="foot-lnk" style="margin-top: 30px;">
+							<a href="/forget">Forgot Password?</a>
+						</div>
+					</form>
+			</form>
+         </div>
+      </form>
+			<div class="sign-up-htm">
+				<form class="form-signin" method="POST" action="/register">
+					<form action="/action_page.php" method="post">
+						<div class="group">
+							<label for="user" class="label">Username</label>
+							<input id="user" type="text" class="input" name="register_username" required maxlength="20">
+						</div>
+						<div class="group">
+							<label for="pass" class="label">Password</label>
+							<input id="register_password" type="password" class="input" name="register_password" required maxlength="20">
+							<!-- data-type="password" -->
+						</div>
+						<div class="group">
+							<label for="pass" class="label">Repeat Password</label>
+							<input id="register_repeat_password" type="password" class="input" name="register_repeat_password" required maxlength="20" onkeyup="register()">
+							<!-- data-type="password"  -->
+							<div id="checkconfirm"></div>
+						</div>
+						<div class="group">
+							<label for="pass" class="label">Secret Question</label>
+							<input id="pass" type="text" class="input" name="register_question" required maxlength="100">
+						</div>
+						<div class="group">
+								<label for="pass" class="label">Answer</label>
+								<input id="pass" type="text" class="input" name="register_answer" required maxlength="20">
+						</div>
+						<div class="group">
+							<input type="submit" class="button" value="Sign Up" name="register_submit" id="register_submit">
+						</div>
+						<div class="hr"></div>
+						<div class="foot-lnk" style="margin-top: 30px;">
+							<label for="tab-1" >Already Member?</label>
+						</div>
+					</form>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- partial -->
+<script>
+function register() {
+
+var password= document.getElementById('register_password').value ;
+var confirm= document.getElementById('register_repeat_password').value;
+
+if (confirm!=password){
+  var field = document.getElementById("checkconfirm")
+  field.innerHTML = "not match";
+}
+else{
+  var field = document.getElementById("checkconfirm")
+  field.innerHTML = "";
+}
+}
+
+function hidemessage(){
+	var x = document.getElementById("register_message");
+    x.style.display = "none";
+}
+
+</script>
+</body>
+</html>

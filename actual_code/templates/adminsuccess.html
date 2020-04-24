@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../static/adminsuccess.css">
+  </head>
+  <body>
+    <div class="tab">
+      <button class="tablinks">hi {{current_user.username.split("@")[1]}}</button>
+      <button class="tablinks" onclick="openCity(event, 'Pending')" id="defaultOpen">Pending Request</button>
+      <button class="tablinks" onclick="openCity(event, 'Approved')">Approved Request</button>
+      <button style="float: right;"><a href="/logout">Logout</a></button>
+  </div>
+      <div id="Pending" class="tabcontent">
+        <table>
+          {% for user in pending %} 
+                    <tr><td><a href="{{ url_for('main.forget', user_id=user.id) }}" class="list-group-item">
+                      <h4 class="list-group-item-heading">{{ user.username }}</h4>
+                    </a>
+                  </td>
+                  </tr>
+                  {% endfor %}
+                </table>
+      </div>
+      <div id="Approved" class="tabcontent">
+        <table>
+          {% for user in approved %}
+                    <tr><td><a href="{{ url_for('main.approve', user_id=user.id) }}" class="list-group-item">
+                      <h4 class="list-group-item-heading">{{ user.name }}</h4>
+                    </a>
+                  </td>
+                  </tr>
+                  {% endfor %}
+                </table>
+      </div>
+    
+  <script src="../static/adminsuccess.js"></script>
+  </body>
