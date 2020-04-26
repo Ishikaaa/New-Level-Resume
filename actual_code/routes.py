@@ -8,6 +8,7 @@ from sqlalchemy import and_
 from flask import Markup,flash,session
 import datetime
 from cryptography.fernet import Fernet
+from twilio.twiml.messaging_response import MessagingResponse
 
 main = Blueprint('main',__name__)
 
@@ -349,6 +350,213 @@ def approve(id):
 def logout():
     logout_user()
     return redirect(url_for('main.login'))
+
+@main.route('/smsexample',methods=['GET','POST'])
+def smsexample():
+    if request.method=="POST":
+        resp = MessagingResponse()
+        msg=request.form.get("Body")
+        phone=request.form.get("From")
+        resp.message("You said: {}".format(respMsg))
+        return str(resp)
+    return "hiii.. No message upto now"
+
+@main.route('/sms',methods=['GET','POST'])
+def sms_reply():
+    if request.method=="POST":
+        resp = MessagingResponse()
+        msg=request.form.get("Body")
+        phone=request.form.get("From")
+        recruiter = Recruiter.query.filter_by(phone=phone).first()
+        if msg=='exit':
+            resp.message("Thank You for Visiting.. Goodbye")
+            if recruiter:
+                recruiter.message=None
+                db.session.add(recruiter)
+                db.session.commit()
+            return str(resp)
+        
+        if msg=='11':
+            resp.message("Enter username")
+            if recruiter:
+                recruiter.message=None
+                db.session.add(recruiter)
+                db.session.commit()
+            return str(resp)
+
+        if msg=='Hi':
+            resp.message("Hello..Tell username whose data you wanna know? To exit press 'exit'")
+            recruiter=Recruiter(phone=phone)
+            db.session.add(recruiter)
+            db.session.commit()
+            return str(resp)
+        
+        if recruiter and not recruiter.message:
+            admin = Admin.query.filter_by(username=msg).first()
+            if admin:
+                recruiter.message=admin
+                db.session.add(recruiter)
+                db.session.commit()
+                resp.message("For About press 1. For Education press 2. For Technical press 3. For Language press 4. For Course press 5. For Projects press 6. For Jobs press 7. For exit write 'exit'. For search for another user press 10")
+                return str(resp)
+            else:
+                resp.message("User does not exist")
+                return str(resp)
+        
+        if recruiter and recruiter.message:
+            rec_msg=recruiter.message
+            rec_msg_list=rec_msg.split(", ")
+            admin = Admin.query.filter_by(username=rec_msg_list[0]).first()
+            if len(rec_msg_list)==1:
+                # About
+                if msg=="1":
+                    user = User.query.filter_by(name=admin.username).first()
+                    a=recruiter.message
+                    a=a+", 1"
+                    recruiter.message=a
+                    db.session.add(recruiter)
+                    db.session.commit()
+                    resp.message("About: {} Address: {} Email: {} Phone: {} Github: {} Resume: {} LinkedIn: {} Hackerrank: {} Achievements: {}"
+                    .format(user.about, user.address, user.email, user.phone, user.github, user.resume, user.linkedin, user.hackerrank, user.achievements))
+                    return str(resp)
+                
+                # Education
+                elif msg=="2":
+                    user = User.query.filter_by(name=admin.username).first()
+                    a=recruiter.message
+                    a=a+", 2"
+                    recruiter.message=a
+                    db.session.add(recruiter)
+                    db.session.commit()
+                    resp.message("For 10th press 1. For 12th press 2. For BTech press 3.")
+                    return str(resp)
+
+                # Technical 
+                elif msg=="3":
+                    user = User.query.filter_by(name=admin.username).first()
+                    user_technical = User_technical.query.filter_by(user_id=user.user_technicals).first()
+                    a=recruiter.message
+                    a=a+", 3"
+                    recruiter.message=a
+                    db.session.add(recruiter)
+                    db.session.commit()
+                    resp.message("Technical Skills: {} Rating: {}".format(user_technical.name, user_technical.rating))
+                    return str(resp)
+
+                # Language
+                elif msg=="4":
+                    user = User.query.filter_by(name=admin.username).first()
+                    user_language = User_language.query.filter_by(user_id=user.user_languages).first()
+                    a=recruiter.message
+                    a=a+", 4"
+                    recruiter.message=a
+                    db.session.add(recruiter)
+                    db.session.commit()
+                    resp.message("Language: {} Reading: {} Writing: {} Speaking: {}"
+                    .format(user_language.name, user_language.reading, user_language.writing, user_language.spwaking))
+                    return str(resp)
+
+                # Course
+                elif msg=="5":
+                    user = User.query.filter_by(name=admin.username).first()
+                    user_course = User_course.query.filter_by(user_id=user.user_courses).first()
+                    a=recruiter.message
+                    a=a+", 5"
+                    recruiter.message=a
+                    db.session.add(recruiter)
+                    db.session.commit()
+                    resp.message("Course Name: {} Starting Date: {} Ending Date: {} Certificate Link: {} Institution Name: {} Description: {}"
+                    .format(user_course.name, user_course.start, user_course.end, user_course.certificate, user_course.institution, user_course.description))
+                    return str(resp)
+
+                # Projects 
+                elif msg=="6":
+                    user = User.query.filter_by(name=admin.username).first()
+                    user_project = User_project.query.filter_by(user_id=user.user_projects).first()
+                    a=recruiter.message
+                    a=a+", 6"
+                    recruiter.message=a
+                    db.session.add(recruiter)
+                    db.session.commit()
+                    resp.message("Project Name: {} Starting Date: {} Ending Date: {} Language Used: {} Software Used: {} Institution: {} Description: {} Link: {}"
+                    .format(user_project.name, user_project.start, user_project.end, user_project.langauge, user_project.software, user_project.institution, user_project.description, user_project.link))
+                    return str(resp)
+
+                # Jobs
+                elif msg=="7":
+                    user = User.query.filter_by(name=admin.username).first()
+                    user_job = User_job.query.filter_by(user_id=user.user_jobs).first()
+                    a=recruiter.message
+                    a=a+", 7"
+                    recruiter.message=a
+                    db.session.add(recruiter)
+                    db.session.commit()
+                    resp.message("Job Name: {} Starting Date: {} Ending Date: {} Job Status: {} Job Role: {} Salary: {} Description: {} Link: {}"
+                    .format(user_job.name, user_job.start, user_job.end, user_job.status, user_job.role, user_job.salary, user_job.description, user_project.link))
+                    return str(resp)
+
+                else:
+                    resp.message("Invalid value.. Please enter valid value")
+                    return str(resp)
+
+            elif len(rec_msg_list)==2:
+                # 10th education
+                if msg=="1":
+                    user = User.query.filter_by(name=admin.username).first()
+                    degree = Degree.query.filter_by(name="10th").first()
+                    education = Education.query.filter_by(user_id=user.educations, degree_id=degree.id).first()
+                    a=recruiter.message
+                    a=a+", 1"
+                    recruiter.message=a
+                    db.session.add(recruiter)
+                    db.session.commit()
+                    resp.message("Degree: {} School Name: {} Specialization: {} Starting Date: {} Ending Date: {} Marks: {} Description: {} Link: {}"
+                    .format(education.degree, education.university, education.specialisation, education.start, education.end, education.marks, education.description, education.deg_link))
+                    return str(resp)
+                
+                elif msg=="2":
+                    user = User.query.filter_by(name=admin.username).first()
+                    degree = Degree.query.filter_by(name="12th").first()
+                    education = Education.query.filter_by(user_id=user.educations, degree_id=degree.id).first()
+                    a=recruiter.message
+                    a=a+", 2"
+                    recruiter.message=a
+                    db.session.add(recruiter)
+                    db.session.commit()
+                    resp.message("Degree: {} School Name: {} Specialization: {} Starting Date: {} Ending Date: {} Marks: {} Description: {} Link: {}"
+                    .format(education.degree, education.university, education.specialisation, education.start, education.end, education.marks, education.description, education.deg_link))
+                    return str(resp)
+
+                elif msg=="3":
+                    user = User.query.filter_by(name=admin.username).first()
+                    degree = Degree.query.filter_by(name="BTech").first()
+                    education = Education.query.filter_by(user_id=user.educations, degree_id=degree.id).first()
+                    a=recruiter.message
+                    a=a+", 3"
+                    recruiter.message=a
+                    db.session.add(recruiter)
+                    db.session.commit()
+                    resp.message("Degree: {} University Name: {} Specialization: {} Starting Date: {} Ending Date: {} Marks: {} Description: {} Link: {}"
+                    .format(education.degree, education.university, education.specialisation, education.start, education.end, education.marks, education.description, education.deg_link))
+                    return str(resp)
+                
+                else:
+                    pass
+
+
+        else:
+            resp.message("Please enter valid username")
+            if recruiter:
+                recruiter.message=None
+                db.session.add(recruiter)
+                db.session.commit()
+            return str(resp)
+
+        
+
+        
+
+        return str(resp)
 
 @main.route('/', defaults={'path': ''})
 @main.route('/<path:path>')

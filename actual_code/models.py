@@ -152,3 +152,8 @@ class User_job(db.Model):
     salary= db.Column(db.Text)
     description= db.Column(db.Text, nullable = False)
     link= db.Column(db.Text) # company ka link agr dena ho toh
+
+class Recruiter(db.Model):
+    id=db.Column(db.Integer,primary_key=True)
+    phone=db.Column(db.Integer,primary_key=True,nullable=False)
+    message=db.Column(db.Text)
